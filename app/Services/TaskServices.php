@@ -35,4 +35,11 @@ class TaskServices
         // visszatér a frissített feladattal
         return $task;
     }
+
+    // feladat törlése
+    public function destroy(Task $task): void
+    {
+        // törli a megadott feladatot az adatbázisból
+        $task->delete();
+    }
 }

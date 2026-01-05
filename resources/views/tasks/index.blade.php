@@ -50,14 +50,30 @@
                             @endif
                         </div>
 
-                        <form method="POST" action="{{ route('tasks.toggle', $task) }}">
-                            @method('PUT')
-                            @csrf
+                        <div class="d-flex gap-2">
+                            <form method="POST" action="{{ route('tasks.toggle', $task) }}">
+                                @method('PUT')
+                                @csrf
 
-                            <button class="btn btn-sm btn-outline-success">
-                                {{ $task->is_completed ? 'Visszaállít' : 'Kész' }}
-                            </button>
-                        </form>
+                                <button class="btn btn-sm btn-outline-success">
+                                    {{ $task->is_completed ? 'Visszaállít' : 'Kész' }}
+                                </button>
+                            </form>
+                            <form
+                                method="POST"
+                                action="{{ route('tasks.destroy', $task) }}"
+                                onsubmit="return confirm('Biztosan törölni akarod?')"
+                            >
+
+                            @csrf
+                            @method('DELETE')
+
+                            <button class="btn btn-sm btn-outline-danger">Törlés</button>
+
+                            </form>
+                        </div>
+
+
                     </div>
                 </div>
 

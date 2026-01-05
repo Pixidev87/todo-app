@@ -48,4 +48,13 @@ class TaskController extends Controller
         // átirányít a feladatok listájára egy sikeres üzenettel
         return redirect()->route('tasks.index')->with('success', 'task toggled');
     }
+
+    // feladat törlése
+    public function destroy(Task $task): RedirectResponse
+    {
+        // törli a feladatot a szolgáltatáson keresztül
+        $this->taskServices->destroy($task);
+        // átirányít a feladatok listájára egy sikeres üzenettel
+        return redirect()->route('tasks.index')->with('success', 'task deleted');
+    }
 }
