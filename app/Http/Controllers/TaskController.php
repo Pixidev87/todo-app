@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
+use App\Models\Task;
 use App\Services\TaskServices;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
+use Illuminate\Http\RedirectResponse;
 
 
 class TaskController extends Controller
@@ -27,7 +29,7 @@ class TaskController extends Controller
     }
 
     // új feladat létrehozása
-    public function store(StoreTaskRequest $request)
+    public function store(StoreTaskRequest $request): RedirectResponse
     {
         // létrehozza az új feladatot a szolgáltatáson keresztül a validált adatokkal
         $this->taskServices->create(
@@ -36,5 +38,14 @@ class TaskController extends Controller
 
         // átirányít a feladatok listájára egy sikeres üzenettel
         return redirect()->route('tasks.index')->with('success', 'task created');
+    }
+
+    // feladat állapotának váltása
+    public function toggle(Task $task): RedirectResponse
+    {
+        // váltja a feladat állapotát a szolgáltatáson keresztül
+        $this->taskServices->toggle($task);
+        // átirányít a feladatok listájára egy sikeres üzenettel
+        return redirect()->route('tasks.index')->with('success', 'task toggled');
     }
 }

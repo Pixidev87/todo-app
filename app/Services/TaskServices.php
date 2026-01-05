@@ -24,4 +24,15 @@ class TaskServices
             'description' => $data['description'] ?? null,
         ]);
     }
+
+    // feladat állapotának váltása (kész/nem kész)
+    public function toggle(Task $task): Task
+    {
+        // frissíti a feladat "is_completed" mezőjét az ellenkező értékre
+        $task->update([
+            'is_completed' => ! $task->is_completed,
+        ]);
+        // visszatér a frissített feladattal
+        return $task;
+    }
 }

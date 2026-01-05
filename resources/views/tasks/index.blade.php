@@ -39,16 +39,25 @@
             <h2 class="mb-3">Feladatlista</h2>
 
             @forelse ($tasks as $task)
-                <div class="card mb-2">
+                <div class="card mb-2 {{ $task->is_completed ? 'opacity-50' : '' }}">
                     <div class="card-body d-flex justify-content-between align-items-center">
                         <div>
-                            <strong>{{ $task->title }}</strong>
+                            <strong class="{{ $task->is_completed ? 'text-decoration-line-throught' : '' }}">{{ $task->title }}</strong>
                             @if ($task->description)
                                 <div class="text-muted small">
                                     {{ $task->description }}
                                 </div>
                             @endif
                         </div>
+
+                        <form method="POST" action="{{ route('tasks.toggle', $task) }}">
+                            @method('PUT')
+                            @csrf
+
+                            <button class="btn btn-sm btn-outline-success">
+                                {{ $task->is_completed ? 'Visszaállít' : 'Kész' }}
+                            </button>
+                        </form>
                     </div>
                 </div>
 
