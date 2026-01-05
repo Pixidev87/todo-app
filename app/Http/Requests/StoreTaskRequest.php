@@ -22,7 +22,7 @@ class StoreTaskRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => 'request|string|max:255',
+            'title' => 'required|string|max:255',
             'description' => 'nullable|string'
         ];
     }

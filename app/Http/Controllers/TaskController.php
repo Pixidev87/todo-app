@@ -35,6 +35,6 @@ class TaskController extends Controller
         );
 
         // átirányít a feladatok listájára egy sikeres üzenettel
-        return redirect()->route('task.index')->with('success', 'task created');
+        return redirect()->route('tasks.index')->with('success', 'task created');
     }
 }
