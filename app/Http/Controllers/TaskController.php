@@ -69,4 +69,9 @@ class TaskController extends Controller
         // átirányít a feladatok listájára egy sikeres üzenettel
         return redirect()->route('tasks.index')->with('success', 'Updated is successfully');
     }
+
+    public function edit(Task $task): View
+    {
+        return view('tasks.edit', compact('task'));
+    }
 }

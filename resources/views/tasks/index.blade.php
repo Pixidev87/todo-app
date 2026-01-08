@@ -65,6 +65,10 @@
                                 onsubmit="return confirm('Biztosan törölni akarod?')"
                             >
 
+                            <a href="{{ route('tasks.edit', $task) }}"
+                               class="btn btn-sm btn-outline-primary">Szerkesztés</a>
+
+
                             @csrf
                             @method('DELETE')
 
