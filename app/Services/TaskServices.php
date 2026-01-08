@@ -42,4 +42,14 @@ class TaskServices
         // törli a megadott feladatot az adatbázisból
         $task->delete();
     }
+
+    public function update(Task $task, array $data): Task
+    {
+        $task->update([
+            'title' => $data['title'],
+            'description' => $data['description']
+        ]);
+
+        return $task;
+    }
 }

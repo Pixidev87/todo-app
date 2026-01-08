@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
+use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
 use App\Services\TaskServices;
 use Illuminate\Http\Request;
@@ -56,5 +57,16 @@ class TaskController extends Controller
         $this->taskServices->destroy($task);
         // átirányít a feladatok listájára egy sikeres üzenettel
         return redirect()->route('tasks.index')->with('success', 'task deleted');
+    }
+
+    // feladat frissítése
+    public function update(UpdateTaskRequest $request, Task $task): RedirectResponse
+    {
+        // frissíti a feladatot a szolgáltatáson keresztül a validált adatokkal
+        $this->taskServices->update(
+            $task, $request->validated()
+        );
+        // átirányít a feladatok listájára egy sikeres üzenettel
+        return redirect()->route('tasks.index')->with('success', 'Updated is successfully');
     }
 }
