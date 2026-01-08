@@ -78,7 +78,7 @@
                 </div>
 
             @empty
-                <p class="text-muted">Nincs még feladat</p>
+                <p class="text-muted">Nincs még feladat!</p>
             @endforelse
         </div>
     </div>
