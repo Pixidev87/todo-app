@@ -12,6 +12,14 @@
     <nav class="navbar navbar-dark bg-dark mb-4">
         <div class="container">
             <span class="navbar-brand">Todo App</span>
+       
+            @auth
+                <span class="navbar-text text-white me-3">Hello, {{ Auth::user()->name }}</span>
+                <form action="{{ route('auth.logout') }}" method="POST" class="d-inline">
+                    @csrf
+                    <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+                </form>
+            @endauth
         </div>
     </nav>
 

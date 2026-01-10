@@ -9,10 +9,14 @@ use App\Services\TaskServices;
 use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Foundation\Validation\ValidatesRequests;
 
 
 class TaskController extends Controller
 {
+    use AuthorizesRequests, ValidatesRequests;
+
     // Dependency Injection segítségével beillesztjük a TaskServices szolgáltatást
     public function __construct
     (
@@ -53,6 +57,9 @@ class TaskController extends Controller
     // feladat törlése
     public function destroy(Task $task): RedirectResponse
     {
+        // ellenőrzi, hogy a felhasználó jogosult-e a feladat törlésére
+        $this->authorize('delete', $task);
+
         // törli a feladatot a szolgáltatáson keresztül
         $this->taskServices->destroy($task);
         // átirányít a feladatok listájára egy sikeres üzenettel
@@ -62,6 +69,9 @@ class TaskController extends Controller
     // feladat frissítése
     public function update(UpdateTaskRequest $request, Task $task): RedirectResponse
     {
+        // ellenőrzi, hogy a felhasználó jogosult-e a feladat frissítésére
+        $this->authorize('update', $task);
+
         // frissíti a feladatot a szolgáltatáson keresztül a validált adatokkal
         $this->taskServices->update(
             $task, $request->validated()
@@ -72,6 +82,9 @@ class TaskController extends Controller
 
     public function edit(Task $task): View
     {
+        // ellenőrzi, hogy a felhasználó jogosult-e a feladat frissítésére
+        $this->authorize('update', $task);
+
         return view('tasks.edit', compact('task'));
     }
 }
