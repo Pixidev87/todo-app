@@ -15,10 +15,7 @@
 
                 <div class="mb-3">
                     <label class="form-label">Cím</label>
-                    <input
-                        type="text"
-                        name="title"
-                        class="form-control @error('title') is-invalid @enderror"
+                    <input type="text" name="title" class="form-control @error('title') is-invalid @enderror"
                         value="{{ old('title') }}">
 
                     @error('title')
@@ -42,7 +39,8 @@
                 <div class="card mb-2 {{ $task->is_completed ? 'opacity-50' : '' }}">
                     <div class="card-body d-flex justify-content-between align-items-center">
                         <div>
-                            <strong class="{{ $task->is_completed ? 'text-decoration-line-throught' : '' }}">{{ $task->title }}</strong>
+                            <strong
+                                class="{{ $task->is_completed ? 'text-decoration-line-throught' : '' }}">{{ $task->title }}</strong>
                             @if ($task->description)
                                 <div class="text-muted small">
                                     {{ $task->description }}
@@ -59,20 +57,17 @@
                                     {{ $task->is_completed ? 'Visszaállít' : 'Kész' }}
                                 </button>
                             </form>
-                            <form
-                                method="POST"
-                                action="{{ route('tasks.destroy', $task) }}"
-                                onsubmit="return confirm('Biztosan törölni akarod?')"
-                            >
+                            <form method="POST" action="{{ route('tasks.destroy', $task) }}"
+                                onsubmit="return confirm('Biztosan törölni akarod?')">
 
-                            <a href="{{ route('tasks.edit', $task) }}"
-                               class="btn btn-sm btn-outline-primary">Szerkesztés</a>
+                                <a href="{{ route('tasks.edit', $task) }}"
+                                    class="btn btn-sm btn-outline-primary">Szerkesztés</a>
 
 
-                            @csrf
-                            @method('DELETE')
+                                @csrf
+                                @method('DELETE')
 
-                            <button class="btn btn-sm btn-outline-danger">Törlés</button>
+                                <button class="btn btn-sm btn-outline-danger">Törlés</button>
 
                             </form>
                         </div>
@@ -84,6 +79,16 @@
             @empty
                 <p class="text-muted">Nincs még feladat!</p>
             @endforelse
+
+            {{-- Pagination --}}
+            @if ($tasks->hasPages())
+                <div class="mt-3">
+                    {{ $tasks->links('pagination::bootstrap-5') }}
+                </div>
+            @endif
+
+
+
         </div>
     </div>
 

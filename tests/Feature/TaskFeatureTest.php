@@ -80,4 +80,23 @@ class TaskFeatureTest extends TestCase
         ]);
     }
 
+
+    public function test_tasks_index_shows_pagination()
+    {
+        $user = User::factory()->create();
+        //15 feladat oldalanként
+        Task::factory()->count(15)->create(['user_id' => $user->id]);
+
+        $response = $this->actingAs($user)->get(route('tasks.index'));
+
+        $response->assertStatus(200);
+
+        // Ellenőrizzük, hogy 5 feladat van az első oldalon
+        $tasks = $response->viewData('tasks');
+        $this->assertCount(5, $tasks);
+
+        // Ellenőrizzük, hogy a paginate linkek megjelennek az oldalon
+        $response->assertSee('pagination');
+    }
+
 }

@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Task;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class TaskServices
 {
@@ -54,5 +55,12 @@ class TaskServices
         ]);
 
         return $task;
+    }
+
+    // lapozott feladatok lekérdezése
+    public function getAllTasksPaginated(int $perPage = 10): LengthAwarePaginator
+    {
+        // visszaadja a jelenlegi felhasználó feladatait lapozva
+        return Auth::user()->tasks()->latest()->paginate($perPage);
     }
 }

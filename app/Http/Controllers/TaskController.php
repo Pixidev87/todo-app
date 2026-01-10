@@ -27,7 +27,7 @@ class TaskController extends Controller
     public function index(): View
     {
         // lekéri az összes feladatot a szolgáltatáson keresztül
-        $tasks = $this->taskServices->getAllTasks();
+        $tasks = $this->taskServices->getAllTasksPaginated(5);
 
         // visszaadja a 'tasks.index' nézetet a feladatokkal együtt
         return view('tasks.index', compact('tasks'));
