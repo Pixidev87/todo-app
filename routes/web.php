@@ -5,7 +5,7 @@ use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
 
 
-Route::prefix('/tasks')->group(function (){
+Route::prefix('/tasks')->middleware('auth')->group(function (){
     // feladatok listázása
     Route::get('/', [TaskController::class, 'index'])->name('tasks.index');
     // új feladat létrehozása

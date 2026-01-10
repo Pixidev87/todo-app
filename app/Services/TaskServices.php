@@ -4,22 +4,25 @@ namespace App\Services;
 
 use App\Models\Task;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Facades\Auth;
 
 class TaskServices
 {
     // lekérdezi az összes feladatot
     public function getAllTasks(): Collection
     {
+        // Auth::user() - a jelenleg bejelentkezett felhasználót adja vissza
+        // tasks() - a felhasználóhoz tartozó feladatok lekérdezése
         // latest() - a legfrissebb feladatokat hozza előre
         // get() - lekéri az összes feladatot
-        return Task::latest()->get();
+        return Auth::user()->tasks()->latest()->get();
     }
 
     // új feladat létrehozása
     public function create(array $data)
     {
-        // létrehozza az új feladatot az adatbázisban a megadott adatokkal
-        return Task::create([
+        // létrehoz egy új feladatot a jelenlegi felhasználóhoz kapcsolva
+        return Auth::user()->tasks()->create([
             'title' => $data['title'],
             'description' => $data['description'] ?? null,
         ]);
