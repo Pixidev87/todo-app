@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\Models\Task;
 
 class User extends Authenticatable
 {
@@ -47,9 +49,15 @@ class User extends Authenticatable
         ];
     }
 
-    // a szetter a jelszó hasheléséhez
+    // szetter a jelszó hasheléséhez
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
+    }
+
+    // kapcsolat a felhasználó és a feladatok között
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class);
     }
 }

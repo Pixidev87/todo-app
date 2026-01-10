@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Task extends Model
 {
@@ -11,4 +12,10 @@ class Task extends Model
         'description',
         'is_completed'
     ];
+
+    // kapcsolat a feladat és a felhasználó között
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
 }
