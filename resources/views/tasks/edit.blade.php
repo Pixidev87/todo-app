@@ -12,29 +12,12 @@
             @csrf
             @method('PUT')
 
-            <div class="mb-3">
-                <label class="form-label">Cím</label>
-                <input
-                    type="text"
-                    name="title"
-                    class="form-control @error('title') is-invalid @enderror"
-                    value="{{ old('title', $task->title) }}"
-                >
+            <x-input name="title" />
 
-                @error('title')
-                    <div class="invalid-feedback">{{ $message }}</div>
-                @enderror
-            </div>
+            <x-textarea name="description" />
 
-            <div class="mb-3">
-                <label class="form-label">Leírás</label>
-                <textarea
-                    name="description"
-                    class="form-control"
-                >{{ old('description', $task->description) }}</textarea>
-            </div>
 
-            <button class="btn btn-primary">Mentés</button>
+            <x-button>Frissítés</x-button>
             <a href="{{ route('tasks.index') }}" class="btn btn-secondary">
                 Mégse
             </a>

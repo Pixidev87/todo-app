@@ -28,7 +28,7 @@
                     <textarea name="description" class="form-control">{{ old('description') }}</textarea>
                 </div>
 
-                <button class="btn btn-primary">Mentés</button>
+                <x-button>Mentés</x-button>
             </form>
         </div>
 
@@ -53,9 +53,9 @@
                                 @method('PUT')
                                 @csrf
 
-                                <button class="btn btn-sm btn-outline-success">
+                                <x-button variant="outline-success" size="sm">
                                     {{ $task->is_completed ? 'Visszaállít' : 'Kész' }}
-                                </button>
+                                </x-button>
                             </form>
                             <form method="POST" action="{{ route('tasks.destroy', $task) }}"
                                 onsubmit="return confirm('Biztosan törölni akarod?')">
@@ -67,7 +67,7 @@
                                 @csrf
                                 @method('DELETE')
 
-                                <button class="btn btn-sm btn-outline-danger">Törlés</button>
+                                <x-button variant="danger" size="sm">Törlés</x-button>
 
                             </form>
                         </div>
@@ -102,9 +102,7 @@
                     @csrf
                     @method('PUT')
 
-                    <button class="btn btn-sm btn-outline-secondary">
-                        Visszaállítás
-                    </button>
+                    <x-button variant="secondary" size="sm">Visszaállítás</x-button>
                 </form>
             </div>
         @empty

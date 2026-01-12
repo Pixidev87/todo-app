@@ -12,7 +12,7 @@
     <nav class="navbar navbar-dark bg-dark mb-4">
         <div class="container">
             <span class="navbar-brand">Todo App</span>
-       
+
             @auth
                 <span class="navbar-text text-white me-3">Hello, {{ Auth::user()->name }}</span>
                 <form action="{{ route('auth.logout') }}" method="POST" class="d-inline">
@@ -25,9 +25,7 @@
 
     <main class="container">
         @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
+            <x-alert type="success" />  
         @endif
         @yield('content')
     </main>
