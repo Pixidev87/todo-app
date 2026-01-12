@@ -28,9 +28,12 @@ class TaskController extends Controller
     {
         // lekéri az összes feladatot a szolgáltatáson keresztül
         $tasks = $this->taskServices->getAllTasksPaginated(5);
+        // lekéri a törölt feladatokat a szolgáltatáson keresztül
+        $trashedTasks = $this->taskServices->getTrashedTasks();
+
 
         // visszaadja a 'tasks.index' nézetet a feladatokkal együtt
-        return view('tasks.index', compact('tasks'));
+        return view('tasks.index', compact('tasks', 'trashedTasks'));
     }
 
     // új feladat létrehozása
@@ -54,17 +57,6 @@ class TaskController extends Controller
         return redirect()->route('tasks.index')->with('success', 'task toggled');
     }
 
-    // feladat törlése
-    public function destroy(Task $task): RedirectResponse
-    {
-        // ellenőrzi, hogy a felhasználó jogosult-e a feladat törlésére
-        $this->authorize('delete', $task);
-
-        // törli a feladatot a szolgáltatáson keresztül
-        $this->taskServices->destroy($task);
-        // átirányít a feladatok listájára egy sikeres üzenettel
-        return redirect()->route('tasks.index')->with('success', 'task deleted');
-    }
 
     // feladat frissítése
     public function update(UpdateTaskRequest $request, Task $task): RedirectResponse
@@ -86,5 +78,24 @@ class TaskController extends Controller
         $this->authorize('update', $task);
 
         return view('tasks.edit', compact('task'));
+    }
+
+        // feladat törlése
+    public function destroy(Task $task): RedirectResponse
+    {
+        // ellenőrzi, hogy a felhasználó jogosult-e a feladat törlésére
+        $this->authorize('delete', $task);
+
+        // törli a feladatot a szolgáltatáson keresztül
+        $this->taskServices->delete($task);
+        // átirányít a feladatok listájára egy sikeres üzenettel
+        return redirect()->route('tasks.index')->with('success', 'task deleted');
+    }
+
+    public function restore(int $id): RedirectResponse
+    {
+        $this->taskServices->restore($id);
+
+        return redirect()->route('tasks.index')->with('success', 'Task restore');
     }
 }

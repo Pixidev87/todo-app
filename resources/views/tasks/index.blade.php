@@ -90,6 +90,27 @@
 
 
         </div>
+        <hr>
+
+        <h5>Archivált feladatok</h5>
+
+        @forelse($trashedTasks as $task)
+            <div class="d-flex justify-content-between border-bottom py-2">
+                <span class="text-muted">{{ $task->title }}</span>
+
+                <form method="POST" action="{{ route('tasks.restore', $task->id) }}">
+                    @csrf
+                    @method('PUT')
+
+                    <button class="btn btn-sm btn-outline-secondary">
+                        Visszaállítás
+                    </button>
+                </form>
+            </div>
+        @empty
+            <p class="text-muted">Nincs archivált feladat.</p>
+        @endforelse
+
     </div>
 
 @endsection

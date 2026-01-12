@@ -63,4 +63,33 @@ class TaskServices
         // visszaadja a jelenlegi felhasználó feladatait lapozva
         return Auth::user()->tasks()->latest()->paginate($perPage);
     }
+
+    // feladat végleges törlése
+    public function delete(Task $task): void
+    {
+        // véglegesen törli a megadott feladatot az adatbázisból
+        $task->delete();
+    }
+
+    // feladat visszaállítása a lomtárból
+    public function restore(int $taskId): bool
+    {
+        // visszaállítja a megadott azonosítójú feladatot, ha az a jelenlegi felhasználóhoz tartozik
+        return Task::onlyTrashed() // lekérdezi a lomtárban lévő feladatokat
+            ->where('id', $taskId) // csak a lomtárban lévő feladatok közül keres
+            ->where('user_id', Auth::id()) // csak a jelenlegi felhasználó feladatai között keres
+            ->firstOrFail() // ha nincs találat, hibát dob
+            ->restore(); // visszaállítja a feladatot
+    }
+
+    // lomtárban lévő feladatok lekérdezése
+    public function getTrashedTasks(): mixed
+    {
+        // visszaadja a jelenlegi felhasználó lomtárban lévő feladatait
+        return Auth::user() // jelenlegi felhasználó
+            ->tasks() // felhasználó feladatai
+            ->onlyTrashed() // csak a lomtárban lévő feladatok
+            ->latest() // legfrissebbek előre
+            ->get(); // lekéri az összes feladatot
+    }
 }

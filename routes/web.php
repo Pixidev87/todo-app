@@ -18,6 +18,8 @@ Route::prefix('/tasks')->middleware('auth')->group(function (){
     Route::get('/{task}', [TaskController::class, 'edit'])->name('tasks.edit');
     // feladat frissítése
     Route::put('/{task}', [TaskController::class, 'update'])->name('tasks.update');
+    // törölt feladatok listázása
+    Route::put('/{id}/restore', [TaskController::class, 'restore'])->name('tasks.restore');
 });
 
 //Autentikáció
