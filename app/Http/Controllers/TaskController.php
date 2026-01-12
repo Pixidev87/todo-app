@@ -92,10 +92,16 @@ class TaskController extends Controller
         return redirect()->route('tasks.index')->with('success', 'task deleted');
     }
 
+    // feladat visszaállítása
     public function restore(int $id): RedirectResponse
     {
+        // lekéri a törölt feladatot azonosító alapján
+        $task = Task::onlyTrashed()->findOrFail($id);
+        // ellenőrzi, hogy a felhasználó jogosult-e a feladat visszaállítására
+        $this->authorize('restore', $task);
+        // visszaállítja a feladatot a szolgáltatáson keresztül
         $this->taskServices->restore($id);
-
+        // átirányít a feladatok listájára egy sikeres üzenettel
         return redirect()->route('tasks.index')->with('success', 'Task restore');
     }
 }
