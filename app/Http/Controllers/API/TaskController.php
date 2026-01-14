@@ -19,12 +19,12 @@ class TaskController extends Controller
 
     public function index()
     {
-        $this->taskServices->getAllTasksPaginated(10);
+        return $this->taskServices->getAllTasksPaginated(10);
     }
 
     public function store(StoreTaskRequest $request)
     {
-        $this->taskServices->create([
+        return $this->taskServices->create([
             $request->validated()
         ]);
     }
@@ -33,7 +33,7 @@ class TaskController extends Controller
     {
         $this->authorize('update', $task);
 
-        $this->taskServices->update($task, [
+        return $this->taskServices->update($task, [
             $request->validated()
         ]);
     }
@@ -49,6 +49,6 @@ class TaskController extends Controller
 
     public function restore(int $id)
     {
-        $this->taskServices->restore($id);
+        return $this->taskServices->restore($id);
     }
 }
