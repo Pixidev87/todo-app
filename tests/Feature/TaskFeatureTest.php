@@ -41,7 +41,8 @@ class TaskFeatureTest extends TestCase
     public function test_user_cannot_edit_other_users_task()
     {
         $user = User::factory()->create();
-        $task = Task::factory()->create();
+        $otherUser = User::factory()->create();
+        $task = Task::factory()->create(['user_id' => $otherUser->id]);
 
         // Próbáljuk meg szerkeszteni a másik felhasználó feladatát
         $response = $this->actingAs($user)->get(route('tasks.edit', $task));
@@ -69,12 +70,15 @@ class TaskFeatureTest extends TestCase
         $task = Task::factory()->create(['user_id' => $user->id]);
 
         $response = $this->actingAs($user)->put(route('tasks.update', $task), [
-            'title' => 'updated title'
+            'title' => 'updated title',
+            'description' => 'updated description',
+            
         ]);
 
         $response->assertRedirect(route('tasks.index'));
 
         $this->assertDatabaseHas('tasks', [
+
             'id' => $task->id,
             'title' => 'updated title',
         ]);
@@ -99,6 +103,6 @@ class TaskFeatureTest extends TestCase
         $response->assertSee('pagination');
     }
 
-    
+
 
 }

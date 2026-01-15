@@ -32,8 +32,8 @@ class TaskController extends Controller
         $trashedTasks = $this->taskServices->getTrashedTasks();
 
 
-        // visszaadja a feladatokat a nézetnek a TaskResource segítségével
-        return TaskResource::collection($tasks)->toView('tasks.index', [
+        // visszaadja a feladatokat a nézetnek
+        return view('tasks.index', [
             'tasks' => $tasks,
             'trashedTasks' => $trashedTasks,
         ]);
@@ -62,17 +62,17 @@ class TaskController extends Controller
 
 
     // feladat frissítése
-    public function update(UpdateTaskRequest $request, Task $task): TaskResource
+    public function update(UpdateTaskRequest $request, Task $task): RedirectResponse
     {
         // ellenőrzi, hogy a felhasználó jogosult-e a feladat frissítésére
         $this->authorize('update', $task);
 
         // frissíti a feladatot a szolgáltatáson keresztül a validált adatokkal
-        $task = $this->taskServices->update(
+        $this->taskServices->update(
             $task, $request->toDto()
         );
-        // visszaadja a frissített feladatot a TaskResource segítségével
-        return new TaskResource($task);
+        // átirányít a feladatok listájára
+        return redirect()->route('tasks.index');
     }
 
     public function edit(Task $task): View

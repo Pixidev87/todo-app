@@ -53,7 +53,7 @@ class SoftDeleteTest extends TestCase
         // Létrehozunk egy másik felhasználót
         $user = User::factory()->create();
         // Megpróbáljuk visszaállítani a feladatot a másik felhasználóval
-        $this->actingAs($user)->put(route('tasks.restore', $task->id))->assertStatus(404);
+        $this->actingAs($user)->put(route('tasks.restore', $task->id))->assertStatus(403);
 
 
     }
