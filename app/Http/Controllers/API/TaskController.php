@@ -9,6 +9,8 @@ use App\Models\Task;
 use App\Services\TaskServices;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
+use Illuminate\Http\Response;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class TaskController extends Controller
 {
@@ -17,28 +19,24 @@ class TaskController extends Controller
         private TaskServices $taskServices
     ){}
 
-    public function index()
+    public function index(): LengthAwarePaginator
     {
         return $this->taskServices->getAllTasksPaginated(10);
     }
 
     public function store(StoreTaskRequest $request)
     {
-        return $this->taskServices->create([
-            $request->validated()
-        ]);
+        return $this->taskServices->create($request->toDto());
     }
 
-    public function update(UpdateTaskRequest $request, Task $task)
+    public function update(UpdateTaskRequest $request, Task $task): Task
     {
         $this->authorize('update', $task);
 
-        return $this->taskServices->update($task, [
-            $request->validated()
-        ]);
+        return $this->taskServices->update($task, $request->toDto());
     }
 
-    public function delete(Task $task)
+    public function delete(Task $task): Response
     {
         $this->authorize('delete', $task);
 
@@ -47,7 +45,7 @@ class TaskController extends Controller
         return response()->noContent(204);
     }
 
-    public function restore(int $id)
+    public function restore(int $id): bool
     {
         return $this->taskServices->restore($id);
     }

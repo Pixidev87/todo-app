@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DTOs\Task\TaskData;
 use App\Models\Task;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Auth;
@@ -20,12 +21,12 @@ class TaskServices
     }
 
     // új feladat létrehozása
-    public function create(array $data)
+    public function create(TaskData $data)
     {
         // létrehoz egy új feladatot a jelenlegi felhasználóhoz kapcsolva
         return Auth::user()->tasks()->create([
-            'title' => $data['title'],
-            'description' => $data['description'] ?? null,
+            'title' => $data->title,
+            'description' => $data->description ?? null,
         ]);
     }
 
@@ -47,11 +48,11 @@ class TaskServices
         $task->delete();
     }
 
-    public function update(Task $task, array $data): Task
+    public function update(Task $task, TaskData $data): Task
     {
         $task->update([
-            'title' => $data['title'],
-            'description' => $data['description'] ?? null
+            'title' => $data->title,
+            'description' => $data->description ?? null
         ]);
 
         return $task;

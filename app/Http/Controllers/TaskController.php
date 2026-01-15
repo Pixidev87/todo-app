@@ -6,7 +6,6 @@ use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
 use App\Models\Task;
 use App\Services\TaskServices;
-use Illuminate\Http\Request;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -41,7 +40,7 @@ class TaskController extends Controller
     {
         // létrehozza az új feladatot a szolgáltatáson keresztül a validált adatokkal
         $this->taskServices->create(
-            $request->validated()
+            $request->toDto()
         );
 
         // átirányít a feladatok listájára egy sikeres üzenettel
@@ -66,7 +65,7 @@ class TaskController extends Controller
 
         // frissíti a feladatot a szolgáltatáson keresztül a validált adatokkal
         $this->taskServices->update(
-            $task, $request->validated()
+            $task, $request->toDto()
         );
         // átirányít a feladatok listájára egy sikeres üzenettel
         return redirect()->route('tasks.index')->with('success', 'Updated is successfully');

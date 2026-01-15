@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\DTOs\Task\TaskData;
 
 class UpdateTaskRequest extends FormRequest
 {
@@ -25,5 +26,10 @@ class UpdateTaskRequest extends FormRequest
             'title' => 'required|string|max:255',
             'description' => 'nullable|string'
         ];
+    }
+
+    public function toDto(): TaskData
+    {
+        return TaskData::fromArray($this->validated());
     }
 }
