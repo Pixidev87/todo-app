@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreTaskRequest;
 use App\Http\Requests\UpdateTaskRequest;
+use App\Http\Resources\TaskResource;
 use App\Models\Task;
 use App\Services\TaskServices;
 use Illuminate\Contracts\View\View;
@@ -31,20 +32,23 @@ class TaskController extends Controller
         $trashedTasks = $this->taskServices->getTrashedTasks();
 
 
-        // visszaadja a 'tasks.index' nézetet a feladatokkal együtt
-        return view('tasks.index', compact('tasks', 'trashedTasks'));
+        // visszaadja a feladatokat a nézetnek a TaskResource segítségével
+        return TaskResource::collection($tasks)->toView('tasks.index', [
+            'tasks' => $tasks,
+            'trashedTasks' => $trashedTasks,
+        ]);
     }
 
     // új feladat létrehozása
-    public function store(StoreTaskRequest $request): RedirectResponse
+    public function store(StoreTaskRequest $request): TaskResource
     {
         // létrehozza az új feladatot a szolgáltatáson keresztül a validált adatokkal
-        $this->taskServices->create(
+        $task = $this->taskServices->create(
             $request->toDto()
         );
 
-        // átirányít a feladatok listájára egy sikeres üzenettel
-        return redirect()->route('tasks.index')->with('success', 'task created');
+        // visszaadja az új feladatot a TaskResource segítségével
+        return new TaskResource($task);
     }
 
     // feladat állapotának váltása
@@ -58,17 +62,17 @@ class TaskController extends Controller
 
 
     // feladat frissítése
-    public function update(UpdateTaskRequest $request, Task $task): RedirectResponse
+    public function update(UpdateTaskRequest $request, Task $task): TaskResource
     {
         // ellenőrzi, hogy a felhasználó jogosult-e a feladat frissítésére
         $this->authorize('update', $task);
 
         // frissíti a feladatot a szolgáltatáson keresztül a validált adatokkal
-        $this->taskServices->update(
+        $task = $this->taskServices->update(
             $task, $request->toDto()
         );
-        // átirányít a feladatok listájára egy sikeres üzenettel
-        return redirect()->route('tasks.index')->with('success', 'Updated is successfully');
+        // visszaadja a frissített feladatot a TaskResource segítségével
+        return new TaskResource($task);
     }
 
     public function edit(Task $task): View
@@ -80,27 +84,27 @@ class TaskController extends Controller
     }
 
         // feladat törlése
-    public function destroy(Task $task): RedirectResponse
+    public function destroy(Task $task): mixed
     {
         // ellenőrzi, hogy a felhasználó jogosult-e a feladat törlésére
         $this->authorize('delete', $task);
 
         // törli a feladatot a szolgáltatáson keresztül
         $this->taskServices->delete($task);
-        // átirányít a feladatok listájára egy sikeres üzenettel
-        return redirect()->route('tasks.index')->with('success', 'task deleted');
+        // visszaad egy üres választ a sikeres törlés jelzésére
+        return response()->noContent();
     }
 
     // feladat visszaállítása
-    public function restore(int $id): RedirectResponse
+    public function restore(int $id): TaskResource
     {
         // lekéri a törölt feladatot azonosító alapján
         $task = Task::onlyTrashed()->findOrFail($id);
         // ellenőrzi, hogy a felhasználó jogosult-e a feladat visszaállítására
         $this->authorize('restore', $task);
         // visszaállítja a feladatot a szolgáltatáson keresztül
-        $this->taskServices->restore($id);
-        // átirányít a feladatok listájára egy sikeres üzenettel
-        return redirect()->route('tasks.index')->with('success', 'Task restore');
+        $task = $this->taskServices->restore($id);
+        // visszaadja a visszaállított feladatot a TaskResource segítségével
+        return new TaskResource($task);
     }
 }
